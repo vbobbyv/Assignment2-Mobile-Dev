@@ -1,5 +1,6 @@
 package com.example.assignment2_ponhvathvann_1502538;
 
+import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,11 +9,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.RequestQueue;
-
 public class MainActivity extends AppCompatActivity {
-    RequestQueue queue = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.mnuEx1:
-                Intent intentExercise1 = new Intent(MainActivity.this, Exercise1.class);
+                Intent intentExercise1 = new Intent(MainActivity.this, VolleyRequestExercise.class);
                 startActivity(intentExercise1);
                 break;
             case R.id.mnuEx2:
@@ -52,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentExercise5);
                 break;
             case R.id.mnuEx6:
+                Intent intentExercise6 = new Intent(MainActivity.this, TabActivity.class);
+                startActivity(intentExercise6);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
