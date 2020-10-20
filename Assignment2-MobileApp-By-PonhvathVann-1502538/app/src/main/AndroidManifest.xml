@@ -33,8 +33,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".MiniProject"
+            android:label="@string/title_activity_mini_project"></activity>
+        <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity android:name=".Exercise5" />
         <activity android:name=".Exercise4" />
         <activity android:name=".Exercise3" />
