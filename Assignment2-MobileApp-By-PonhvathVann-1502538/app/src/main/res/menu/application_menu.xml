@@ -4,16 +4,16 @@
 
     <item
         android:id="@+id/mnuEx1"
-        android:title="Exercise1" />
+        android:title="Volley Request App" />
     <item
         android:id="@+id/mnuEx2"
-        android:title="Exercise2" />
+        android:title="Fused Location App" />
     <item
         android:id="@+id/mnuEx3"
-        android:title="Exercise3" />
+        android:title="Google Maps App" />
     <item
         android:id="@+id/mnuEx4"
-        android:title="Exercise4" />
+        android:title="Mini Project" />
     <item
         android:id="@+id/mnuEx5"
         android:title="Exercise5" />
