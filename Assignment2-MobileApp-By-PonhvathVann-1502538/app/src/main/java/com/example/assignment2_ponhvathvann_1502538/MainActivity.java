@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(fusedLocationServiceExercise);
                 break;
             case R.id.mnuEx3:
-                Intent intentExercise3 = new Intent(MainActivity.this, Exercise3.class);
+                Intent intentExercise3 = new Intent(MainActivity.this, MapsActivity.class);
                 startActivity(intentExercise3);
                 break;
             case R.id.mnuEx4:
