@@ -29,12 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.mnuEx1:
-                Intent intentExercise1 = new Intent(MainActivity.this, VolleyRequestExercise.class);
-                startActivity(intentExercise1);
+                Intent volleyRequestExercise = new Intent(MainActivity.this, VolleyRequestExercise.class);
+                startActivity(volleyRequestExercise);
                 break;
             case R.id.mnuEx2:
-                Intent intentExercise2 = new Intent(MainActivity.this, Exercise2.class);
-                startActivity(intentExercise2);
+                Intent fusedLocationServiceExercise = new Intent(MainActivity.this, FusedLocationServiceExercise.class);
+                startActivity(fusedLocationServiceExercise);
                 break;
             case R.id.mnuEx3:
                 Intent intentExercise3 = new Intent(MainActivity.this, Exercise3.class);
