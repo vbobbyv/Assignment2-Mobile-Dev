@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -73,9 +76,54 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                 String address = place.getAddress();
 
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(latLng).title(locationName));
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(locationName)
+                        .snippet(address)
+                );
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+                    // Use default InfoWindow frame
+                    @Override
+                    public View getInfoWindow(Marker arg0) {
+                        return null;
+                    }
+
+                    // Defines the contents of the InfoWindow
+                    @Override
+                    public View getInfoContents(Marker arg0) {
+
+                        // Getting view from the layout file infowindowlayout.xml
+                        View customInfoWindow = getLayoutInflater().inflate(R.layout.infowindow, null);
+
+                        TextView tvName = (TextView) customInfoWindow.findViewById(R.id.txtViewName);
+                        TextView tvAddress = (TextView) customInfoWindow.findViewById(R.id.txtViewAddress);
+
+                        LatLng latLng = arg0.getPosition();
+                        String title=arg0.getTitle();
+                        String address=arg0.getSnippet();
+
+                        tvName.setText(title);
+                        tvAddress.setText(address);
+
+                        return customInfoWindow;
+                    }
+                });
             }
+
+//            public boolean onMarkerClick(final Marker marker) {
+//
+//                if (marker.equals(Somewhere))
+//                {
+//                    markerclicked=1;
+//                    return true;
+//                }
+//                return false;
+//
+//                marker.showInfoWindow();
+//            }
 
 
             @Override
