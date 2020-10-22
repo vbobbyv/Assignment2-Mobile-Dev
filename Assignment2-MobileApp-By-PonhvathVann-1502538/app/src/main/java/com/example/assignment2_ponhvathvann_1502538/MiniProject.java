@@ -13,6 +13,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -33,8 +40,13 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MiniProject extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
@@ -43,6 +55,7 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
     private FusedLocationProviderClient client;
     private boolean requestLocation = false;
     AutocompleteSupportFragment autocompleteFragment;
+    RequestQueue queue = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +66,8 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         client = LocationServices.getFusedLocationProviderClient(this);
+
+        queue = Volley.newRequestQueue(getApplicationContext());
 
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyCCvZDYG9_zmCFqsXqDXM1zXIIf0DYnNFg");
@@ -201,6 +216,8 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                         mMap.setOnMyLocationButtonClickListener(MiniProject.this);
                         mMap.setOnMyLocationClickListener(MiniProject.this);
 
+                        findNearbyRestaurant(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), 500);
+
                     }
                 }, null);
 
@@ -208,6 +225,61 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                 ex.printStackTrace();
             }
         }
+    }
+
+    private void findNearbyRestaurant(String lat, String lng, int radius) {
+        String rootUrl = "https://developers.zomato.com/api/v2.1/search?";
+        String location = "lat=" + lat + "&lon=" + lng + "&radius=" + radius;
+        String url = rootUrl + location;
+
+        System.out.println(url);
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray data = response.getJSONArray("restaurants");
+
+                            for(int index = 0; index < data.length(); index++)
+                            {
+                                JSONObject restaurant_info = data.getJSONObject(index);
+                                JSONObject restaurant = restaurant_info.getJSONObject("restaurant");
+                                JSONObject location = restaurant.getJSONObject("location");
+
+                                String restaurant_name = restaurant.getString("name");
+                                String restaurant_latitude = location.getString("latitude");
+                                String restaurant_longitude = location.getString("longitude");
+
+                                LatLng latLng = new LatLng(Double.parseDouble(restaurant_latitude), Double.parseDouble(restaurant_longitude));
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(restaurant_name));
+
+                                System.out.println(restaurant_name);
+                                System.out.println(restaurant_latitude);
+                                System.out.println(restaurant_longitude);
+
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("error",error.getLocalizedMessage());
+                    }
+                })
+                {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("Content-Type", "application/json; charset=UTF-8");
+                        params.put("user-key", "7e0ecb646b8b71ac0cd781e4ad519efb");
+                        return params;
+                    }
+                };
+        queue.add(jsObjRequest);
     }
 
     @Override
