@@ -42,7 +42,7 @@ public class VolleyRequestExercise extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String url ="https://developers.zomato.com/api/v2.1/search?entity_id=70&entity_type=city&lat=-36.84842&lon=174.76337&user-key:7e0ecb646b8b71ac0cd781e4ad519efb";
+                String url ="https://developers.zomato.com/api/v2.1/search?entity_id=70&entity_type=city&lat=-36.84842&lon=174.76337";
 
                 JsonObjectRequest jsObjRequest = new JsonObjectRequest
                         (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -109,9 +109,9 @@ public class VolleyRequestExercise extends AppCompatActivity {
                                 return params;
                             }
                         };
-                        // Add the request to the RequestQueue.
-                        queue.add(jsObjRequest);
-                    }
+                    // Add the request to the RequestQueue.
+                queue.add(jsObjRequest);
+            }
         });
     }
 }
