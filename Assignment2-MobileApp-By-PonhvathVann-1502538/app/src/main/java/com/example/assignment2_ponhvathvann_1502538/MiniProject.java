@@ -54,6 +54,8 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1 ;
     private FusedLocationProviderClient client;
     private boolean requestLocation = false;
+    private double currentLatitude;
+    private double currentLongitude;
     AutocompleteSupportFragment autocompleteFragment;
     RequestQueue queue = null;
 
@@ -203,6 +205,9 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                         Location location = locationResult.getLastLocation();
 
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                        currentLatitude = location.getLatitude();
+                        currentLongitude = location.getLongitude();
 //                        Marker myLocation = mMap.addMarker(new MarkerOptions().position(latLng));
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -216,7 +221,7 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                         mMap.setOnMyLocationButtonClickListener(MiniProject.this);
                         mMap.setOnMyLocationClickListener(MiniProject.this);
 
-                        findNearbyRestaurant(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), 500);
+
 
                     }
                 }, null);
@@ -302,11 +307,64 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public boolean onMyLocationButtonClick() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted? Ask for permission
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation asynchronously and ask for permission
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
+            }
+        } else {
+            // Permission has already been granted, Do something else
+            try{
+                LocationRequest req = new LocationRequest();
+//                req.setInterval(2000); // 2 seconds
+//                req.setFastestInterval(500); // 500 milliseconds
+//                req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                client.requestLocationUpdates(req, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        mMap.clear();
+                        Location location = locationResult.getLastLocation();
+
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                        currentLatitude = location.getLatitude();
+                        currentLongitude = location.getLongitude();
+//                        Marker myLocation = mMap.addMarker(new MarkerOptions().position(latLng));
+
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        CameraPosition cameraPosition = new CameraPosition.Builder()
+                                .target(latLng)
+                                .zoom(15)
+                                .build();
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                        mMap.setMyLocationEnabled(true);
+                        mMap.setOnMyLocationButtonClickListener(MiniProject.this);
+                        mMap.setOnMyLocationClickListener(MiniProject.this);
+                        findNearbyRestaurant(String.valueOf(currentLatitude), String.valueOf(currentLongitude), 500);
+
+
+
+                    }
+                }, null);
+
+            }catch (SecurityException ex) {
+                ex.printStackTrace();
+            }
+        }
         return false;
     }
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-
     }
 }
