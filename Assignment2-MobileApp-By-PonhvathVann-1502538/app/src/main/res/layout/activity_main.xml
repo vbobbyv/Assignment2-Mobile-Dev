@@ -10,22 +10,118 @@
         android:id="@+id/txtJSON"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginTop="8dp"
+        android:text="Web Servies, Sensor, Google Maps"
+        android:textAlignment="center"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btnRequest"
+    <ImageView
+        android:id="@+id/imgViewRestaurant"
+        android:layout_width="213dp"
+        android:layout_height="526dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/imgViewMiniProject"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002"
+        app:srcCompat="@drawable/restaurant" />
+
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="167dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="156dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Restaurants"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imgViewRestaurant"
+        app:layout_constraintEnd_toEndOf="@+id/imgViewRestaurant"
+        app:layout_constraintStart_toStartOf="@+id/imgViewRestaurant"
+        app:layout_constraintTop_toTopOf="@+id/imgViewRestaurant" />
+
+    <ImageView
+        android:id="@+id/imgViewMiniProject"
+        android:layout_width="376dp"
+        android:layout_height="220dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="328dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txtJSON"
+        app:layout_constraintVertical_bias="0.79"
+        app:srcCompat="@drawable/longlat" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mini Project"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imgViewMiniProject"
+        app:layout_constraintEnd_toEndOf="@+id/imgViewMiniProject"
+        app:layout_constraintHorizontal_bias="0.26"
+        app:layout_constraintStart_toStartOf="@+id/imgViewMiniProject"
+        app:layout_constraintTop_toTopOf="@+id/imgViewMiniProject" />
+
+    <ImageView
+        android:id="@+id/imgViewLongLat"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/imgViewRestaurant"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.120000005"
+        app:srcCompat="@drawable/googlemap" />
+
+    <ImageView
+        android:id="@+id/imgViewGoogleMap"
+        android:layout_width="113dp"
+        android:layout_height="173dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toEndOf="@+id/imgViewRestaurant"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgViewLongLat"
+        app:layout_constraintVertical_bias="0.41000003"
+        app:srcCompat="@drawable/locationmap" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="148dp"
+        android:text="Longitude &amp; Latitude"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imgViewLongLat"
+        app:layout_constraintHorizontal_bias="0.625"
+        app:layout_constraintStart_toStartOf="@+id/imgViewLongLat"
+        app:layout_constraintTop_toTopOf="@+id/imgViewLongLat" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map Location"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imgViewGoogleMap"
+        app:layout_constraintEnd_toEndOf="@+id/imgViewGoogleMap"
+        app:layout_constraintStart_toStartOf="@+id/imgViewGoogleMap"
+        app:layout_constraintTop_toBottomOf="@+id/imgViewLongLat"
+        app:layout_constraintVertical_bias="0.94" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
