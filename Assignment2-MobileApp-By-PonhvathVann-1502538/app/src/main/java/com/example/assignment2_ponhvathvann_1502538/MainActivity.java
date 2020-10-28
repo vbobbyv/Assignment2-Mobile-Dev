@@ -83,14 +83,6 @@ public class MainActivity extends AppCompatActivity {
 //                Intent MiniProjectExercise = new Intent(MainActivity.this, MiniProject.class);
 //                startActivity(MiniProjectExercise);
 //                break;
-//            case R.id.mnuEx5:
-//                Intent intentExercise5 = new Intent(MainActivity.this, Exercise5.class);
-//                startActivity(intentExercise5);
-//                break;
-//            case R.id.mnuEx6:
-//                Intent intentExercise6 = new Intent(MainActivity.this, TabActivity.class);
-//                startActivity(intentExercise6);
-//                break;
 //            default:
 //                return super.onOptionsItemSelected(item);
 //        }

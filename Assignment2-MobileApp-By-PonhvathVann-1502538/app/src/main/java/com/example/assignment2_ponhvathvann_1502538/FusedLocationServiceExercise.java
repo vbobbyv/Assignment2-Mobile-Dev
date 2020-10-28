@@ -1,7 +1,6 @@
 package com.example.assignment2_ponhvathvann_1502538;
 
 import android.Manifest;
-import android.app.TabActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -132,14 +131,6 @@ public class FusedLocationServiceExercise extends AppCompatActivity {
             case R.id.mnuEx4:
                 Intent MiniProjectExercise = new Intent(FusedLocationServiceExercise.this, MiniProject.class);
                 startActivity(MiniProjectExercise);
-                break;
-            case R.id.mnuEx5:
-                Intent intentExercise5 = new Intent(FusedLocationServiceExercise.this, Exercise5.class);
-                startActivity(intentExercise5);
-                break;
-            case R.id.mnuEx6:
-                Intent intentExercise6 = new Intent(FusedLocationServiceExercise.this, TabActivity.class);
-                startActivity(intentExercise6);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
