@@ -90,28 +90,11 @@ public class VolleyRequestExercise extends AppCompatActivity {
                                                 restaurant_reviews_count,
                                                 restaurant_url
                                         );
-
                                         restaurantList.add(newRestaurant);
-
-//                                        System.out.println(restaurant_name);
-//                                        System.out.println(restaurant_address);
-//                                        System.out.println(restaurant_contact);
-//                                        System.out.println(restaurant_cuisine);
-//                                        System.out.println(restaurant_average_cost_for_2);
-//                                        System.out.println(restaurant_aggregate_rating);
-//                                        System.out.println(restaurant_rating_text);
-//                                        System.out.println(restaurant_reviews_count);
-
-
-
-
-//                                        restaurants.append(properties.getString("locality")+"\n");
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-//                                output.setText(restaurants.toString());
-//                                System.out.println(restaurantList.size());
 
 //                                ArrayAdapter<Restaurant> arrayAdapter = new ArrayAdapter<Restaurant>(VolleyRequestExercise.this, R.layout.list_item, restaurantList);
 //                                listRestaurants.setAdapter(arrayAdapter);
@@ -123,7 +106,6 @@ public class VolleyRequestExercise extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Log.e("error",error.getLocalizedMessage());
-
                             }
                         })
                         {
