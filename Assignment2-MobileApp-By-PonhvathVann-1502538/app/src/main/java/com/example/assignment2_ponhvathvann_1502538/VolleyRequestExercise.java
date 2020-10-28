@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,23 +24,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class VolleyRequestExercise extends AppCompatActivity {
-
-    TextView output;
     Button btnRequest;
     RequestQueue queue = null;
+    ListView listRestaurants;
+    ArrayList<Restaurant> restaurantList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_volley_request_exercise);
 
+        listRestaurants = findViewById(R.id.xmlListView);
         queue = Volley.newRequestQueue(getApplicationContext());
-        output = (TextView)findViewById(R.id.txtViewOutput);
         btnRequest = (Button)findViewById(R.id.btnGetAklRestaurant);
+        restaurantList = new ArrayList<Restaurant>();
 
         btnRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,15 +77,30 @@ public class VolleyRequestExercise extends AppCompatActivity {
                                         String restaurant_aggregate_rating = rating.getString("aggregate_rating");
                                         String restaurant_rating_text = rating.getString("rating_text");
                                         String restaurant_reviews_count = restaurant.getString("all_reviews_count");
+                                        String restaurant_url = "google.com";
+                                        
+                                        Restaurant newRestaurant = new Restaurant(
+                                                restaurant_name,
+                                                restaurant_address,
+                                                restaurant_contact,
+                                                restaurant_cuisine,
+                                                restaurant_average_cost_for_2,
+                                                restaurant_aggregate_rating,
+                                                restaurant_rating_text,
+                                                restaurant_reviews_count,
+                                                restaurant_url
+                                        );
 
-                                        System.out.println(restaurant_name);
-                                        System.out.println(restaurant_address);
-                                        System.out.println(restaurant_contact);
-                                        System.out.println(restaurant_cuisine);
-                                        System.out.println(restaurant_average_cost_for_2);
-                                        System.out.println(restaurant_aggregate_rating);
-                                        System.out.println(restaurant_rating_text);
-                                        System.out.println(restaurant_reviews_count);
+                                        restaurantList.add(newRestaurant);
+
+//                                        System.out.println(restaurant_name);
+//                                        System.out.println(restaurant_address);
+//                                        System.out.println(restaurant_contact);
+//                                        System.out.println(restaurant_cuisine);
+//                                        System.out.println(restaurant_average_cost_for_2);
+//                                        System.out.println(restaurant_aggregate_rating);
+//                                        System.out.println(restaurant_rating_text);
+//                                        System.out.println(restaurant_reviews_count);
 
 
 
@@ -94,6 +111,12 @@ public class VolleyRequestExercise extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
 //                                output.setText(restaurants.toString());
+//                                System.out.println(restaurantList.size());
+
+//                                ArrayAdapter<Restaurant> arrayAdapter = new ArrayAdapter<Restaurant>(VolleyRequestExercise.this, R.layout.list_item, restaurantList);
+//                                listRestaurants.setAdapter(arrayAdapter);
+                                RestaurantAdapter restaurantAdapter = new RestaurantAdapter(VolleyRequestExercise.this, R.layout.list_record, restaurantList);
+                                listRestaurants.setAdapter(restaurantAdapter);
                             }
                         }, new Response.ErrorListener() {
 
