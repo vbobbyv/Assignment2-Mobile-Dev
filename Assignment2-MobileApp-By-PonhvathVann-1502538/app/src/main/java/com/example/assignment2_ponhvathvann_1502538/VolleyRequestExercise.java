@@ -1,11 +1,16 @@
 package com.example.assignment2_ponhvathvann_1502538;
 
+import android.app.TabActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -113,5 +118,46 @@ public class VolleyRequestExercise extends AppCompatActivity {
                 queue.add(jsObjRequest);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.application_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.mnuEx1:
+                Intent volleyRequestExercise = new Intent(VolleyRequestExercise.this, VolleyRequestExercise.class);
+                startActivity(volleyRequestExercise);
+                break;
+            case R.id.mnuEx2:
+                Intent fusedLocationServiceExercise = new Intent(VolleyRequestExercise.this, FusedLocationServiceExercise.class);
+                startActivity(fusedLocationServiceExercise);
+                break;
+            case R.id.mnuEx3:
+                Intent MapsActivityExercise = new Intent(VolleyRequestExercise.this, MapsActivity.class);
+                startActivity(MapsActivityExercise);
+                break;
+            case R.id.mnuEx4:
+                Intent MiniProjectExercise = new Intent(VolleyRequestExercise.this, MiniProject.class);
+                startActivity(MiniProjectExercise);
+                break;
+            case R.id.mnuEx5:
+                Intent intentExercise5 = new Intent(VolleyRequestExercise.this, Exercise5.class);
+                startActivity(intentExercise5);
+                break;
+            case R.id.mnuEx6:
+                Intent intentExercise6 = new Intent(VolleyRequestExercise.this, TabActivity.class);
+                startActivity(intentExercise6);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }
