@@ -51,13 +51,14 @@ import java.util.Map;
 public class MiniProject extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
     private GoogleMap mMap;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1 ;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
     private FusedLocationProviderClient client;
-    private boolean requestLocation = false;
     private double currentLatitude;
     private double currentLongitude;
+    boolean requestLocation = false;
     AutocompleteSupportFragment autocompleteFragment;
     RequestQueue queue = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,26 +83,21 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NotNull Place place) {
-                // TODO: Get info about the selected place.
                 Log.i("Search", "Place: " + place.getName() + ", " + place.getId());
-                System.out.println(place.getAddress());
-                System.out.println(place.getName());
-                System.out.println(place.getLatLng());
 
                 LatLng latLng = place.getLatLng();
                 String locationName = place.getName();
                 String address = place.getAddress();
 
                 mMap.clear();
-                Marker marker = mMap.addMarker(new MarkerOptions()
+                mMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(locationName)
                         .snippet(address)
                 );
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-
+                // Custom InfoWindow
                 mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
                     // Use default InfoWindow frame
                     @Override
                     public View getInfoWindow(Marker arg0) {
@@ -111,14 +107,12 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                     // Defines the contents of the InfoWindow
                     @Override
                     public View getInfoContents(Marker arg0) {
-
                         // Getting view from the layout file infowindowlayout.xml
                         View customInfoWindow = getLayoutInflater().inflate(R.layout.infowindow, null);
 
                         TextView tvName = (TextView) customInfoWindow.findViewById(R.id.txtViewName);
                         TextView tvAddress = (TextView) customInfoWindow.findViewById(R.id.txtViewAddress);
 
-                        LatLng latLng = arg0.getPosition();
                         String title=arg0.getTitle();
                         String address=arg0.getSnippet();
 
@@ -130,22 +124,8 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                 });
             }
 
-//            public boolean onMarkerClick(final Marker marker) {
-//
-//                if (marker.equals(Somewhere))
-//                {
-//                    markerclicked=1;
-//                    return true;
-//                }
-//                return false;
-//
-//                marker.showInfoWindow();
-//            }
-
-
             @Override
             public void onError(@NotNull Status status) {
-                // TODO: Handle the error.
                 Log.i("Search", "An error occurred: " + status);
             }
         });
@@ -177,67 +157,14 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted? Ask for permission
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation asynchronously and ask for permission
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
-            }
-        } else {
-            // Permission has already been granted, Do something else
-            try{
-                LocationRequest req = new LocationRequest();
-//                req.setInterval(2000); // 2 seconds
-//                req.setFastestInterval(500); // 500 milliseconds
-//                req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-                client.requestLocationUpdates(req, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        mMap.clear();
-                        Location location = locationResult.getLastLocation();
-
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-                        currentLatitude = location.getLatitude();
-                        currentLongitude = location.getLongitude();
-//                        Marker myLocation = mMap.addMarker(new MarkerOptions().position(latLng));
-
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                        CameraPosition cameraPosition = new CameraPosition.Builder()
-                                .target(latLng)
-                                .zoom(15)
-                                .build();
-                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                        mMap.setMyLocationEnabled(true);
-                        mMap.setOnMyLocationButtonClickListener(MiniProject.this);
-                        mMap.setOnMyLocationClickListener(MiniProject.this);
-
-
-
-                    }
-                }, null);
-
-            }catch (SecurityException ex) {
-                ex.printStackTrace();
-            }
-        }
+        //Get current user location
+        getUserCurrentLocation();
     }
 
     private void findNearbyRestaurant(String lat, String lng, int radius) {
         String rootUrl = "https://developers.zomato.com/api/v2.1/search?";
         String location = "lat=" + lat + "&lon=" + lng + "&radius=" + radius;
         String url = rootUrl + location;
-
-        System.out.println(url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -256,14 +183,16 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                                 String restaurant_name = restaurant.getString("name");
                                 String restaurant_latitude = location.getString("latitude");
                                 String restaurant_longitude = location.getString("longitude");
+                                String restaurant_address = location.getString("address");
 
-                                LatLng latLng = new LatLng(Double.parseDouble(restaurant_latitude), Double.parseDouble(restaurant_longitude));
-                                mMap.addMarker(new MarkerOptions().position(latLng).title(restaurant_name));
-
-                                System.out.println(restaurant_name);
-                                System.out.println(restaurant_latitude);
-                                System.out.println(restaurant_longitude);
-
+                                LatLng latLng = new LatLng(Double.parseDouble(restaurant_latitude),
+                                        Double.parseDouble(restaurant_longitude));
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .title(restaurant_name)
+                                        .snippet(restaurant_address)
+//                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.eaticon))
+                                );
                             }
                         }catch (JSONException e) {
                             e.printStackTrace();
@@ -307,6 +236,17 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public boolean onMyLocationButtonClick() {
+        getUserCurrentLocation();
+//        findNearbyRestaurant(String.valueOf(currentLatitude),
+//                String.valueOf(currentLongitude), 500);
+        return false;
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+    }
+
+    public void getUserCurrentLocation() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -324,21 +264,17 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
             // Permission has already been granted, Do something else
             try{
                 LocationRequest req = new LocationRequest();
-//                req.setInterval(2000); // 2 seconds
-//                req.setFastestInterval(500); // 500 milliseconds
-//                req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
                 client.requestLocationUpdates(req, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         mMap.clear();
-                        Location location = locationResult.getLastLocation();
 
+                        Location location = locationResult.getLastLocation();
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                         currentLatitude = location.getLatitude();
                         currentLongitude = location.getLongitude();
-//                        Marker myLocation = mMap.addMarker(new MarkerOptions().position(latLng));
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -346,14 +282,11 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                                 .zoom(15)
                                 .build();
                         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
                         mMap.setMyLocationEnabled(true);
                         mMap.setOnMyLocationButtonClickListener(MiniProject.this);
                         mMap.setOnMyLocationClickListener(MiniProject.this);
-                        findNearbyRestaurant(String.valueOf(currentLatitude), String.valueOf(currentLongitude), 500);
-
-
-
+                        findNearbyRestaurant(String.valueOf(currentLatitude),
+                                String.valueOf(currentLongitude), 500);
                     }
                 }, null);
 
@@ -361,10 +294,5 @@ public class MiniProject extends FragmentActivity implements OnMapReadyCallback,
                 ex.printStackTrace();
             }
         }
-        return false;
-    }
-
-    @Override
-    public void onMyLocationClick(@NonNull Location location) {
     }
 }
