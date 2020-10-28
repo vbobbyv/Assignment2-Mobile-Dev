@@ -28,7 +28,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1 ;
     private FusedLocationProviderClient client;
-    private boolean requestLocation = false;
+    boolean requestLocation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
 
-
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -91,18 +90,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         mMap.clear();
+
                         Location location = locationResult.getLastLocation();
-
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        Marker myLocation = mMap.addMarker(new MarkerOptions().position(latLng));
 
+                        Marker currentLocation = mMap.addMarker(new MarkerOptions().position(latLng)
+                                .title("Current Location")
+                                .snippet("Latitude: " + latitude + ", Longitude: " + longitude));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         CameraPosition cameraPosition = new CameraPosition.Builder()
                                 .target(latLng)
                                 .zoom(15)
                                 .build();
                         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
+                        currentLocation.showInfoWindow();
                     }
                 }, null);
 
@@ -113,8 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions,
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
