@@ -76,33 +76,6 @@ public class FusedLocationServiceExercise extends AppCompatActivity {
                 }
             }
         });
-
-//        LocationRequest req = new LocationRequest();
-//        req.setInterval(2000);
-//        req.setFastestInterval(500);
-//        req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Permission is not granted? Ask for permission
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-//                // Show an explanation asynchronously and ask for permission
-//            } else {
-//                // No explanation needed; request the permission
-//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-//            }
-//        } else {
-//            // Permission has already been granted
-//            client.requestLocationUpdates(req,new LocationCallback(){
-//                @Override
-//                public void onLocationResult(LocationResult locationResult) {
-//                    Log.e("location:", locationResult.getLastLocation().toString());
-//                    System.out.println(locationResult.getLastLocation().getLatitude());
-//                    System.out.println(locationResult.getLastLocation().getLongitude());
-//
-//                    Toast.makeText(FusedLocationServiceExercise.this, locationResult.getLastLocation().toString(), Toast.LENGTH_LONG).show();
-//                }
-//            },null);
-//        }
     }
 
     @Override
